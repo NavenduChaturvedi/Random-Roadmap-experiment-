@@ -1,0 +1,843 @@
+<!DOCTYPE html><html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>NV's Mindrift Roadmap</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,400&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #0e0e0e;
+      --surface: #161616;
+      --surface-2: #1c1c1c;
+      --surface-3: #222222;
+      --text: #f0ede6;
+      --muted: #888;
+      --line: #2a2a2a;
+      --accent: #c8f04a;
+      --accent-dim: rgba(200,240,74,0.1);
+      --accent-border: rgba(200,240,74,0.2);
+      --done: #4ade80;
+      --done-dim: rgba(74,222,128,0.08);
+      --warn: #fb923c;
+      --radius: 18px;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+      padding: 40px 20px 100px;
+    }
+
+    .container { max-width: 1060px; margin: 0 auto; }
+
+    /* HERO */
+    .hero {
+      border: 1px solid var(--line);
+      border-radius: 28px;
+      padding: 56px 52px;
+      background: var(--surface);
+      margin-bottom: 40px;
+      position: relative;
+      overflow: hidden;
+    }
+    .hero::before {
+      content: '';
+      position: absolute;
+      top: -80px; right: -80px;
+      width: 320px; height: 320px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(200,240,74,0.08), transparent 65%);
+      pointer-events: none;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--accent-dim);
+      border: 1px solid var(--accent-border);
+      color: var(--accent);
+      padding: 6px 14px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      margin-bottom: 28px;
+    }
+
+    h1 {
+      font-family: 'Syne', sans-serif;
+      font-size: clamp(2.4rem, 5.5vw, 4.2rem);
+      line-height: 0.95;
+      letter-spacing: -0.04em;
+      margin-bottom: 22px;
+    }
+    h1 span { color: var(--accent); }
+
+    .hero > p {
+      color: var(--muted);
+      font-size: 1rem;
+      max-width: 680px;
+      margin-bottom: 36px;
+    }
+
+    /* overall progress */
+    .overall-progress {
+      background: var(--surface-2);
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      padding: 20px 24px;
+      margin-bottom: 28px;
+    }
+    .op-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 14px;
+    }
+    .op-label { font-size: 0.82rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.08em; }
+    .op-pct { font-family: 'Syne', sans-serif; font-size: 1.4rem; font-weight: 700; color: var(--accent); }
+    .op-bar {
+      width: 100%; height: 8px;
+      background: var(--surface-3);
+      border-radius: 999px;
+      overflow: hidden;
+    }
+    .op-fill {
+      height: 100%;
+      width: 32%;
+      background: linear-gradient(90deg, var(--accent), #a8d40f);
+      border-radius: 999px;
+      animation: fillbar 1.2s ease forwards;
+    }
+    @keyframes fillbar {
+      from { width: 0; }
+    }
+
+    /* quick stats */
+    .quick-stats {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+      gap: 14px;
+    }
+    .stat {
+      background: var(--surface-2);
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      padding: 16px 18px;
+    }
+    .stat-label { font-size: 0.72rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 8px; }
+    .stat-value { font-family: 'Syne', sans-serif; font-size: 1.05rem; font-weight: 700; }
+
+    /* section header */
+    .section-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      gap: 16px;
+      margin: 46px 0 18px;
+      flex-wrap: wrap;
+    }
+    .section-header h2 {
+      font-family: 'Syne', sans-serif;
+      font-size: 1.4rem;
+      letter-spacing: -0.03em;
+    }
+    .section-header span { color: var(--muted); font-size: 0.9rem; }
+
+    /* skills chips */
+    .skills { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 32px; }
+    .skill {
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      padding: 8px 14px;
+      font-size: 0.88rem;
+      font-weight: 500;
+      background: var(--surface);
+      color: var(--muted);
+      transition: all 0.2s;
+    }
+    .skill.done {
+      border-color: rgba(74,222,128,0.3);
+      background: rgba(74,222,128,0.07);
+      color: var(--done);
+    }
+    .skill.partial {
+      border-color: rgba(251,146,60,0.3);
+      background: rgba(251,146,60,0.07);
+      color: var(--warn);
+    }
+
+    /* roadmap phases */
+    .roadmap { display: grid; gap: 20px; }
+
+    .phase {
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      overflow: hidden;
+      transition: border-color 0.2s;
+    }
+    .phase:hover { border-color: #333; }
+    .phase.phase-active { border-color: rgba(200,240,74,0.25); }
+    .phase.phase-done { border-color: rgba(74,222,128,0.2); }
+
+    .phase-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+      padding: 26px 28px;
+      cursor: pointer;
+      user-select: none;
+    }
+    .phase-header::-webkit-details-marker { display: none; }
+
+    .phase-left { display: flex; align-items: flex-start; gap: 18px; flex: 1; }
+
+    .phase-num {
+      width: 44px; height: 44px;
+      border-radius: 12px;
+      display: flex; align-items: center; justify-content: center;
+      font-family: 'Syne', sans-serif;
+      font-size: 1.1rem; font-weight: 800;
+      flex-shrink: 0;
+      background: var(--surface-2);
+      color: var(--muted);
+      border: 1px solid var(--line);
+    }
+    .phase-active .phase-num {
+      background: var(--accent-dim);
+      color: var(--accent);
+      border-color: var(--accent-border);
+    }
+    .phase-done .phase-num {
+      background: var(--done-dim);
+      color: var(--done);
+      border-color: rgba(74,222,128,0.25);
+    }
+
+    .phase-title-block h3 {
+      font-family: 'Syne', sans-serif;
+      font-size: 1.25rem;
+      letter-spacing: -0.03em;
+      margin-bottom: 4px;
+    }
+    .phase-subtitle { color: var(--muted); font-size: 0.9rem; max-width: 560px; }
+
+    .phase-right { display: flex; gap: 10px; flex-wrap: wrap; align-items: flex-start; flex-shrink: 0; }
+    .meta-pill {
+      background: var(--surface-2);
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      padding: 8px 12px;
+      font-size: 0.8rem;
+    }
+    .meta-pill .ml { color: var(--muted); font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 3px; }
+    .meta-pill .mv { font-weight: 700; }
+
+    .status-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      border-radius: 999px;
+      padding: 5px 12px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+    }
+    .badge-done { background: var(--done-dim); color: var(--done); border: 1px solid rgba(74,222,128,0.2); }
+    .badge-active { background: var(--accent-dim); color: var(--accent); border: 1px solid var(--accent-border); }
+    .badge-locked { background: var(--surface-2); color: var(--muted); border: 1px solid var(--line); }
+
+    .chevron {
+      color: var(--muted);
+      transition: transform 0.25s;
+      flex-shrink: 0;
+      font-size: 1.1rem;
+    }
+    details[open] .chevron { transform: rotate(180deg); }
+
+    /* phase body */
+    .phase-body { padding: 0 28px 28px; }
+
+    /* you-already-know banner */
+    .already-know {
+      background: var(--done-dim);
+      border: 1px solid rgba(74,222,128,0.2);
+      border-radius: 14px;
+      padding: 14px 18px;
+      margin-bottom: 20px;
+      font-size: 0.9rem;
+      color: var(--done);
+    }
+    .already-know strong { display: block; margin-bottom: 4px; font-size: 0.95rem; }
+    .already-know span { color: rgba(74,222,128,0.7); font-size: 0.85rem; }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 14px;
+    }
+
+    .card {
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      padding: 18px;
+      background: var(--surface-2);
+    }
+    .card h4 {
+      font-family: 'Syne', sans-serif;
+      font-size: 0.95rem;
+      letter-spacing: -0.02em;
+      margin-bottom: 14px;
+      color: var(--text);
+    }
+
+    ul { list-style: none; display: flex; flex-direction: column; gap: 10px; }
+    li {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      font-size: 0.9rem;
+      color: #aaa;
+    }
+    li .tick {
+      flex-shrink: 0;
+      margin-top: 2px;
+      font-size: 0.85rem;
+    }
+    li.item-done { color: var(--done); }
+    li.item-done .tick { color: var(--done); }
+    li.item-todo .tick { color: #444; }
+
+    .checkpoint {
+      margin-top: 16px;
+      background: var(--accent-dim);
+      border: 1px solid var(--accent-border);
+      border-radius: 12px;
+      padding: 14px 16px;
+    }
+    .checkpoint-label {
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--accent);
+      font-weight: 700;
+      margin-bottom: 6px;
+    }
+    .checkpoint strong { display: block; font-size: 0.92rem; margin-bottom: 5px; }
+    .checkpoint p { font-size: 0.84rem; color: var(--muted); }
+
+    .card.skip-card { border-color: rgba(251,146,60,0.2); background: rgba(251,146,60,0.04); }
+    .card.skip-card h4 { color: var(--warn); }
+    .card.skip-card li { color: #888; }
+
+    .resources { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 18px; }
+    .resource {
+      border: 1px solid var(--line);
+      background: var(--surface);
+      border-radius: 999px;
+      padding: 6px 12px;
+      font-size: 0.8rem;
+      color: var(--muted);
+    }
+
+    /* FINAL */
+    .final {
+      margin-top: 40px;
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: 24px;
+      padding: 44px 48px;
+      position: relative;
+      overflow: hidden;
+    }
+    .final::before {
+      content: '';
+      position: absolute;
+      bottom: -60px; left: -60px;
+      width: 280px; height: 280px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(200,240,74,0.06), transparent 70%);
+      pointer-events: none;
+    }
+    .final h2 {
+      font-family: 'Syne', sans-serif;
+      font-size: 1.9rem;
+      letter-spacing: -0.04em;
+      margin-bottom: 12px;
+    }
+    .final > p { color: var(--muted); max-width: 680px; margin-bottom: 28px; font-size: 0.97rem; }
+
+    .final-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 14px;
+    }
+    .final-card {
+      background: var(--surface-2);
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      padding: 16px 18px;
+    }
+    .final-card h4 { font-family: 'Syne', sans-serif; font-size: 0.95rem; margin-bottom: 8px; }
+    .final-card p { font-size: 0.85rem; color: var(--muted); line-height: 1.5; }
+
+    .adjusted-note {
+      background: var(--accent-dim);
+      border: 1px solid var(--accent-border);
+      border-radius: 14px;
+      padding: 14px 18px;
+      margin-top: 24px;
+      font-size: 0.88rem;
+      color: rgba(200,240,74,0.85);
+    }
+    .adjusted-note strong { color: var(--accent); display: block; margin-bottom: 4px; }
+
+    @media (max-width: 768px) {
+      body { padding: 18px 14px 60px; }
+      .hero { padding: 32px 22px; }
+      .phase-header { flex-wrap: wrap; }
+      .phase-right { display: none; }
+      .final { padding: 28px 22px; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="eyebrow">NV • Mindrift Roadmap • Personalised Edition</div>
+    <h1>Learn Fast.<br>Build <span>Real</span> Projects.<br>Become Hireable.</h1>
+    <p>
+      You're not starting from zero. Adjusted for what you already know from IITM — Python, Pandas, NumPy, data handling.
+      Your actual gap is scraping, automation, and AI pipelines. That's what this roadmap targets.
+    </p>
+
+    <div class="overall-progress">
+      <div class="op-header">
+        <span class="op-label">Overall Roadmap Progress (estimated)</span>
+        <span class="op-pct">~32%</span>
+      </div>
+      <div class="op-bar"><div class="op-fill"></div></div>
+    </div>
+
+    <div class="quick-stats">
+      <div class="stat">
+        <div class="stat-label">Adjusted Timeline</div>
+        <div class="stat-value">4–5 Weeks</div>
+      </div>
+      <div class="stat">
+        <div class="stat-label">Daily Time</div>
+        <div class="stat-value">2–3 Hours</div>
+      </div>
+      <div class="stat">
+        <div class="stat-label">Focus</div>
+        <div class="stat-value">Scraping + AI</div>
+      </div>
+      <div class="stat">
+        <div class="stat-label">Output</div>
+        <div class="stat-value">Portfolio + CV</div>
+      </div>
+      <div class="stat">
+        <div class="stat-label">Phase 1 Speed</div>
+        <div class="stat-value">2–3 Days</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SKILLS -->
+  <div class="section-header">
+    <h2>Skills to build</h2>
+    <span>Green = already solid. Orange = partial. Grey = fresh territory.</span>
+  </div>
+
+  <div class="skills">
+    <div class="skill done">Python ✓</div>
+    <div class="skill done">Pandas ✓</div>
+    <div class="skill done">CSV / JSON ✓</div>
+    <div class="skill done">GitHub ✓</div>
+    <div class="skill partial">HTML / CSS ~</div>
+    <div class="skill partial">AJAX / APIs ~</div>
+    <div class="skill">requests</div>
+    <div class="skill">BeautifulSoup</div>
+    <div class="skill">Selenium / Playwright</div>
+    <div class="skill">Google Sheets API</div>
+    <div class="skill">OpenRouter</div>
+    <div class="skill">Data validation</div>
+  </div>
+
+  <!-- ROADMAP -->
+  <div class="section-header">
+    <h2>Roadmap</h2>
+    <span>Each phase ends with a real deliverable.</span>
+  </div>
+
+  <div class="roadmap">
+
+    <!-- PHASE 1 -->
+    <section class="phase phase-active">
+      <details open>
+        <summary>
+          <div class="phase-header">
+            <div class="phase-left">
+              <div class="phase-num">1</div>
+              <div class="phase-title-block">
+                <h3>Python + Scraping Foundations</h3>
+                <p class="phase-subtitle">You already know 80% of what this phase covers. Skip the Python review — go straight to requests and BeautifulSoup.</p>
+              </div>
+            </div>
+            <div class="phase-right">
+              <div class="meta-pill"><div class="ml">Your Timeline</div><div class="mv">2–3 Days</div></div>
+              <div class="meta-pill"><div class="ml">Original</div><div class="mv">Week 1–2</div></div>
+              <span class="status-badge badge-active">▶ Start Here</span>
+            </div>
+            <div class="chevron">▾</div>
+          </div>
+        </summary>
+
+        <div class="phase-body">
+          <div class="already-know">
+            <strong>✓ You already know this — skip it</strong>
+            <span>Variables, loops, conditions, functions, lists, dicts, tuples, CSV/JSON read-write, pip, basic try/except — all covered in IITM. Don't waste 2 weeks reviewing things you know.</span>
+          </div>
+
+          <div class="grid">
+            <div class="card">
+              <h4>Core Python — DONE for you</h4>
+              <ul>
+                <li class="item-done"><span class="tick">✓</span> Variables, loops, conditions, functions</li>
+                <li class="item-done"><span class="tick">✓</span> Lists, dicts, sets, tuples</li>
+                <li class="item-done"><span class="tick">✓</span> Importing libraries, using pip</li>
+                <li class="item-done"><span class="tick">✓</span> Reading/writing CSV and JSON</li>
+                <li class="item-done"><span class="tick">✓</span> Basic error handling (try/except)</li>
+                <li class="item-todo"><span class="tick">○</span> Beginner-level API understanding</li>
+              </ul>
+            </div>
+
+            <div class="card skip-card">
+              <h4>⚠ Still Don't Touch Yet</h4>
+              <ul>
+                <li class="item-todo"><span class="tick">—</span> Advanced DSA / competitive programming</li>
+                <li class="item-todo"><span class="tick">—</span> Complex OOP theory</li>
+                <li class="item-todo"><span class="tick">—</span> Desktop apps</li>
+                <li class="item-todo"><span class="tick">—</span> ML theory deep dives</li>
+                <li class="item-todo"><span class="tick">—</span> Premature code optimisation</li>
+              </ul>
+            </div>
+
+            <div class="card">
+              <h4>Web Scraping Basics — YOUR actual gap</h4>
+              <ul>
+                <li class="item-todo"><span class="tick">○</span> HTML tags, classes, ids, attributes</li>
+                <li class="item-todo"><span class="tick">○</span> DOM structure and nesting</li>
+                <li class="item-todo"><span class="tick">○</span> requests library</li>
+                <li class="item-todo"><span class="tick">○</span> BeautifulSoup selectors</li>
+                <li class="item-todo"><span class="tick">○</span> Extracting text, links, images, tables</li>
+                <li class="item-todo"><span class="tick">○</span> Cleaning messy text output</li>
+              </ul>
+            </div>
+
+            <div class="card">
+              <h4>Mini Projects</h4>
+              <ul>
+                <li class="item-todo"><span class="tick">○</span> Quotes scraper</li>
+                <li class="item-todo"><span class="tick">○</span> News headline scraper</li>
+                <li class="item-todo"><span class="tick">○</span> Simple e-commerce product scraper</li>
+                <li class="item-todo"><span class="tick">○</span> Export results to CSV and JSON</li>
+              </ul>
+              <div class="checkpoint">
+                <div class="checkpoint-label">Checkpoint</div>
+                <strong>Scrape a static website without tutorials.</strong>
+                <p>If you still need tutorials for every step, practice more before moving forward.</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="resources">
+            <span class="resource">Python docs</span>
+            <span class="resource">BeautifulSoup docs</span>
+            <span class="resource">requests docs</span>
+            <span class="resource">quotes.toscrape.com (practice target)</span>
+          </div>
+        </div>
+      </details>
+    </section>
+
+    <!-- PHASE 2 -->
+    <section class="phase">
+      <details>
+        <summary>
+          <div class="phase-header">
+            <div class="phase-left">
+              <div class="phase-num">2</div>
+              <div class="phase-title-block">
+                <h3>Dynamic Websites + Automation</h3>
+                <p class="phase-subtitle">Modern websites hide data behind JS, APIs, and infinite scroll. This phase teaches how to deal with that properly.</p>
+              </div>
+            </div>
+            <div class="phase-right">
+              <div class="meta-pill"><div class="ml">Timeline</div><div class="mv">Week 2–3</div></div>
+              <div class="meta-pill"><div class="ml">Goal</div><div class="mv">JS-heavy sites</div></div>
+              <span class="status-badge badge-locked">Locked</span>
+            </div>
+            <div class="chevron">▾</div>
+          </div>
+        </summary>
+
+        <div class="phase-body">
+          <div class="grid">
+            <div class="card">
+              <h4>Browser Automation</h4>
+              <ul>
+                <li class="item-todo"><span class="tick">○</span> Selenium or Playwright basics</li>
+                <li class="item-todo"><span class="tick">○</span> Clicking buttons and handling forms</li>
+                <li class="item-todo"><span class="tick">○</span> Waiting for elements correctly</li>
+                <li class="item-todo"><span class="tick">○</span> Scrolling and pagination</li>
+                <li class="item-todo"><span class="tick">○</span> Headless vs normal browser mode</li>
+              </ul>
+            </div>
+
+            <div class="card">
+              <h4>DevTools + APIs</h4>
+              <ul>
+                <li class="item-todo"><span class="tick">○</span> Chrome DevTools Network tab</li>
+                <li class="item-todo"><span class="tick">○</span> Finding hidden API endpoints</li>
+                <li class="item-todo"><span class="tick">○</span> Understanding request headers</li>
+                <li class="item-todo"><span class="tick">○</span> Sending API requests directly</li>
+                <li class="item-todo"><span class="tick">○</span> When APIs beat scraping HTML</li>
+              </ul>
+            </div>
+
+            <div class="card">
+              <h4>Important Concepts</h4>
+              <ul>
+                <li class="item-todo"><span class="tick">○</span> Rate limiting basics</li>
+                <li class="item-todo"><span class="tick">○</span> Basic anti-bot understanding</li>
+                <li class="item-todo"><span class="tick">○</span> User agents and cookies</li>
+                <li class="item-todo"><span class="tick">○</span> Handling login sessions</li>
+                <li class="item-todo"><span class="tick">○</span> Why websites block scrapers</li>
+              </ul>
+            </div>
+
+            <div class="card">
+              <h4>Mini Projects</h4>
+              <ul>
+                <li class="item-todo"><span class="tick">○</span> Infinite scroll scraper</li>
+                <li class="item-todo"><span class="tick">○</span> Login-protected scraper</li>
+                <li class="item-todo"><span class="tick">○</span> AJAX/API-based scraper</li>
+                <li class="item-todo"><span class="tick">○</span> Multi-page scraper with automation</li>
+              </ul>
+              <div class="checkpoint">
+                <div class="checkpoint-label">Checkpoint</div>
+                <strong>Dynamic sites stop scaring you.</strong>
+                <p>You don't need to master every anti-bot trick. Reliably working on normal targets is enough.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </details>
+    </section>
+
+    <!-- PHASE 3 -->
+    <section class="phase">
+      <details>
+        <summary>
+          <div class="phase-header">
+            <div class="phase-left">
+              <div class="phase-num">3</div>
+              <div class="phase-title-block">
+                <h3>Data Pipelines + AI Workflows</h3>
+                <p class="phase-subtitle">Scraping alone isn't valuable. Structured, validated, useful output is what makes you employable. Note: Pandas is already in your toolkit.</p>
+              </div>
+            </div>
+            <div class="phase-right">
+              <div class="meta-pill"><div class="ml">Timeline</div><div class="mv">Week 3–4</div></div>
+              <div class="meta-pill"><div class="ml">Goal</div><div class="mv">End-to-end pipeline</div></div>
+              <span class="status-badge badge-locked">Locked</span>
+            </div>
+            <div class="chevron">▾</div>
+          </div>
+        </summary>
+
+        <div class="phase-body">
+          <div class="already-know">
+            <strong>✓ Pandas is already yours</strong>
+            <span>You've covered DataFrames, indexing, filtering, and missing values in IITM. The Pandas section of this phase is largely a review — focus your energy on AI integration and pipeline architecture.</span>
+          </div>
+
+          <div class="grid">
+            <div class="card">
+              <h4>Data Handling — Mostly Done</h4>
+              <ul>
+                <li class="item-done"><span class="tick">✓</span> Pandas basics</li>
+                <li class="item-done"><span class="tick">✓</span> Removing duplicates</li>
+                <li class="item-done"><span class="tick">✓</span> Cleaning missing data</li>
+                <li class="item-todo"><span class="tick">○</span> Formatting clean JSON output</li>
+                <li class="item-todo"><span class="tick">○</span> Exporting to Sheets</li>
+              </ul>
+            </div>
+
+            <div class="card">
+              <h4>AI Integration — Fresh Territory</h4>
+              <ul>
+                <li class="item-todo"><span class="tick">○</span> OpenRouter basics</li>
+                <li class="item-todo"><span class="tick">○</span> Sending prompts through APIs</li>
+                <li class="item-todo"><span class="tick">○</span> Using AI for summarisation</li>
+                <li class="item-todo"><span class="tick">○</span> Using AI for categorisation</li>
+                <li class="item-todo"><span class="tick">○</span> Understanding prompt structure</li>
+              </ul>
+            </div>
+
+            <div class="card">
+              <h4>What Actually Matters</h4>
+              <ul>
+                <li class="item-todo"><span class="tick">○</span> Reliable output over fancy architecture</li>
+                <li class="item-todo"><span class="tick">○</span> Validate before exporting</li>
+                <li class="item-todo"><span class="tick">○</span> Readable code structure</li>
+                <li class="item-todo"><span class="tick">○</span> Handling failed requests gracefully</li>
+                <li class="item-todo"><span class="tick">○</span> Keep workflows modular</li>
+              </ul>
+            </div>
+
+            <div class="card">
+              <h4>Mini Projects</h4>
+              <ul>
+                <li class="item-todo"><span class="tick">○</span> Product enrichment pipeline</li>
+                <li class="item-todo"><span class="tick">○</span> News summarisation scraper</li>
+                <li class="item-todo"><span class="tick">○</span> Google Sheets automation</li>
+                <li class="item-todo"><span class="tick">○</span> AI-tagged data exporter</li>
+              </ul>
+              <div class="checkpoint">
+                <div class="checkpoint-label">Checkpoint</div>
+                <strong>Your output looks professional, not experimental.</strong>
+                <p>This is where "Python student" becomes "automation developer."</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </details>
+    </section>
+
+    <!-- PHASE 4 -->
+    <section class="phase">
+      <details>
+        <summary>
+          <div class="phase-header">
+            <div class="phase-left">
+              <div class="phase-num">4</div>
+              <div class="phase-title-block">
+                <h3>Portfolio + Real-World Readiness</h3>
+                <p class="phase-subtitle">Most people ruin this by polishing forever or shipping garbage. The goal is clean, understandable, believable work.</p>
+              </div>
+            </div>
+            <div class="phase-right">
+              <div class="meta-pill"><div class="ml">Timeline</div><div class="mv">Week 5+</div></div>
+              <div class="meta-pill"><div class="ml">Goal</div><div class="mv">Portfolio + CV</div></div>
+              <span class="status-badge badge-locked">Locked</span>
+            </div>
+            <div class="chevron">▾</div>
+          </div>
+        </summary>
+
+        <div class="phase-body">
+          <div class="grid">
+            <div class="card">
+              <h4>GitHub — You've Started</h4>
+              <ul>
+                <li class="item-done"><span class="tick">✓</span> GitHub account set up (Student Pack)</li>
+                <li class="item-todo"><span class="tick">○</span> Clean repository structure</li>
+                <li class="item-todo"><span class="tick">○</span> Readable README files</li>
+                <li class="item-todo"><span class="tick">○</span> requirements.txt and setup guides</li>
+                <li class="item-todo"><span class="tick">○</span> Example outputs and screenshots</li>
+              </ul>
+            </div>
+
+            <div class="card">
+              <h4>Vibe Coding Properly</h4>
+              <ul>
+                <li class="item-todo"><span class="tick">○</span> Using Cursor or Claude for iteration</li>
+                <li class="item-todo"><span class="tick">○</span> Debugging AI-generated code yourself</li>
+                <li class="item-todo"><span class="tick">○</span> Not blindly copy-pasting generated code</li>
+                <li class="item-todo"><span class="tick">○</span> Learning through edits and fixes</li>
+              </ul>
+            </div>
+
+            <div class="card">
+              <h4>Applications + Resume</h4>
+              <ul>
+                <li class="item-todo"><span class="tick">○</span> Resume focused on outcomes and projects</li>
+                <li class="item-todo"><span class="tick">○</span> Strong GitHub profile</li>
+                <li class="item-todo"><span class="tick">○</span> Clear project descriptions</li>
+                <li class="item-todo"><span class="tick">○</span> Applying with proof, not buzzwords</li>
+              </ul>
+            </div>
+
+            <div class="card">
+              <h4>Capstone Project</h4>
+              <ul>
+                <li class="item-todo"><span class="tick">○</span> Dynamic scraper</li>
+                <li class="item-todo"><span class="tick">○</span> API integration</li>
+                <li class="item-todo"><span class="tick">○</span> Validation system</li>
+                <li class="item-todo"><span class="tick">○</span> AI enrichment</li>
+                <li class="item-todo"><span class="tick">○</span> Structured export pipeline</li>
+              </ul>
+              <div class="checkpoint">
+                <div class="checkpoint-label">Final Checkpoint</div>
+                <strong>2–3 projects that feel real.</strong>
+                <p>Not "calculator app" real. Workflow automation someone could actually pay for.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </details>
+    </section>
+
+  </div>
+
+  <!-- FINAL -->
+  <section class="final">
+    <h2>End Goal</h2>
+    <p>
+      Build enough practical skill to pass screening, complete assessment-style tasks, and present work like someone who ships reliably.
+      Keep it tight: scrape well, process cleanly, document clearly.
+    </p>
+    <div class="final-grid">
+      <div class="final-card">
+        <h4>Skill</h4>
+        <p>Python scraping and browser automation that works on real sites.</p>
+      </div>
+      <div class="final-card">
+        <h4>Workflow</h4>
+        <p>Clean pipelines from raw HTML to structured, AI-enriched output.</p>
+      </div>
+      <div class="final-card">
+        <h4>Portfolio</h4>
+        <p>2–3 GitHub projects with READMEs, outputs, and actual screenshots.</p>
+      </div>
+      <div class="final-card">
+        <h4>Advantage</h4>
+        <p>You're already ~32% done before you even open a scraping tutorial.</p>
+      </div>
+    </div>
+
+    <div class="adjusted-note">
+      <strong>Your adjusted advantage</strong>
+      Original timeline was 6–8 weeks assuming a Python beginner. You're not. Phase 1 drops from 2 weeks to 2–3 days. Phase 3 drops from 2 weeks to roughly 1 because Pandas is already yours. Realistic timeline for you: 4–5 weeks if consistent.
+    </div>
+  </section>
+
+</div>
+  <script src="script.js" defer></script>
+</body>
+</html>
